@@ -6,7 +6,7 @@ export function CoffeeDetails() {
   const route = useRoute()
   return (
     <View style={styles.container}>
-      <Image source={require("../../assets/Image.jpg")}/>
+      <Image style = {styles.image} source={{uri: route.params.coffeeImage}}/>
       <Text>{route.params.coffeName}</Text>
     </View>
   );
@@ -23,4 +23,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
   },
+  image: {
+    width:100,
+    height: 100
+  }
 });
