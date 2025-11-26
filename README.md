@@ -2,3 +2,4 @@
 ![alt text](image-1.png)
 ![alt text](image-2.png)
 ![alt text](image-3.png)
+![Опис GIF-файлу](src/assets/Android%20Emulator%20-%20Pixel_6_5554%202025-11-26%2015-01-25.gif)
