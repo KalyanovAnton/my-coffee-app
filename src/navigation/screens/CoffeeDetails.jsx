@@ -1,14 +1,30 @@
 import { Text } from '@react-navigation/elements';
 import { useRoute } from '@react-navigation/native';
 import { StyleSheet, View, Image } from 'react-native';
+import Button from '../../components/Button';
+import { useDispatch } from 'react-redux';
+import { addItemToBag } from '../../store/bagSlice';
 
 export function CoffeeDetails() {
   const route = useRoute()
+  const dispatch = useDispatch()
+
+  const coffeeItem = route.params
+  
+  
+  const handleAddToBag = () => {
+    console.log(coffeeItem);
+    dispatch(addItemToBag(coffeeItem))
+    alert(`${coffeeItem.name} додано до кошика!`);
+  }
+
+
   return (
-    <View style={styles.container}>
-      <Image style = {styles.image} source={{uri: route.params.coffeeImage}}/>
-      <Text>{route.params.coffeName}</Text>
-    </View>
+    <>
+      <Image style = {styles.image} source={{uri: route.params.imageUrl}}/>
+      <Text>{route.params.name}</Text>
+      <Button text='add to bag' onPress={handleAddToBag}/>
+    </>
   );
 }
 

@@ -34,7 +34,8 @@ const HomeTabs = createBottomTabNavigator({
         tabBarIcon: ({ color, size }) => (
           <Ionicons name="bag-outline" size={size} color={color} />
         ),
-        headerShown: false 
+        headerTitleAlign: 'center',
+        headerTitle: 'Your bag'
       },
     },
     History: {

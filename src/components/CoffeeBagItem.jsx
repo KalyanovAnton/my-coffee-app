@@ -2,7 +2,7 @@ import { TouchableOpacity, Text, Image, StyleSheet, View } from "react-native";
 import CoffeeDetails from "../navigation/screens/CoffeeDetails";
 import { useNavigation } from "@react-navigation/native";
 
-export default function CoffeeItem({ item }) {
+export default function CoffeeBagItem({ item }) {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
@@ -13,16 +13,19 @@ export default function CoffeeItem({ item }) {
           imageUrl: item.imageUrl,
           currency: item.currency,
           price: item.price,
+          quantity: item.quantity,
+          totalPrice: item.totalPrice,
         })
       }
       style={styles.card}
     >
       <Image source={{ uri: item.imageUrl }} style={styles.cardImg} />
-      <View style={styles.coffeeInfo}>
+      <View style={styles.detailsWrapper}>
         <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.price}>
-          {item.currency} {item.price}
-        </Text>
+        <View style={styles.coffeeInfo}>
+          <Text style={styles.quantity}>{item.quantity}</Text>
+          <Text style={styles.totalPrice}>{item.totalPrice}€</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -30,41 +33,56 @@ export default function CoffeeItem({ item }) {
 
 const styles = StyleSheet.create({
   cardImg: {
-    width: "100%",
-    height: 120,
+    width: "30%",
+    height: 100,
     resizeMode: "cover",
+    borderRadius: 16,
+    marginRight: 16,
   },
   card: {
     flex: 1,
-    width: "50%",
-    backgroundColor: "#F8F9FE",
-    borderRadius: 16,
+    flexDirection: "row",
+    width: "100%",
     overflow: "hidden",
-    elevation: 4,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    shadowOffset: { width: 0, height: 2 },
-    margin: 6,
+    marginBottom: 24,
+    paddingBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#d1cdcdff",
+    marginBottom: 10,
   },
   coffeeInfo: {
     padding: 16,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  detailsWrapper: {
+    flex: 1,
+    justifyContent: "space-between",
+    padding: 12,
   },
 
   name: {
     fontFamily: "Inter",
     fontStyle: "normal",
-    fontWeight: 400,
-    fontSize: 12,
+    fontWeight: 700,
+    fontSize: 16,
+    lineHeight: 15,
     color: "#1F2024",
-    marginBottom: 4,
   },
-  price: {
+  totalPrice: {
     fontFamily: "Inter",
     fontStyle: "normal",
     fontWeight: 700,
-    fontSize: 14,
+    fontSize: 16,
     lineHeight: 17,
+    color: "#1F2024",
+  },
+  quantity: {
+    fontFamily: "Inter",
+    fontStyle: "normal",
+    fontWeight: 500,
+    fontSize: 16,
+    lineHeight: 20,
     color: "#1F2024",
   },
 });

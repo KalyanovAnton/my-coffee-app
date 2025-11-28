@@ -1,0 +1,41 @@
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+  items: [],
+  totalQuantity: 0,
+  totalAmount: 0,
+};
+
+const bagSlice = createSlice({
+  name: "bag",
+  initialState,
+  reducers: {
+    addItemToBag: (state, action) => {
+      const newItem = action.payload;
+      const existingItem = state.items.find((item) => item.id === newItem.id);
+      const price = Number(newItem.price);
+
+      state.totalQuantity++;
+      state.totalAmount += price;
+
+      if (!existingItem) {
+        state.items.push({
+          id: newItem.id,
+          name: newItem.name,
+          imageUrl: newItem.imageUrl,
+          currency: newItem.currency,
+          price: price,
+          quantity: 1,
+          totalPrice: price,
+        });
+      } else {
+        existingItem.quantity++;
+        existingItem.totalPrice += price;
+      }
+    },
+  },
+});
+
+export const { addItemToBag } = bagSlice.actions;
+
+export default bagSlice.reducer;
