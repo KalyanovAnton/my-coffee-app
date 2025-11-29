@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 12,
     marginTop: 4,
-    marginBottom: 36
+    marginBottom: 36,
   },
 
   textBtn: {

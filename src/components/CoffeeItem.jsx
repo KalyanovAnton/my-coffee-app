@@ -13,6 +13,7 @@ export default function CoffeeItem({ item }) {
           imageUrl: item.imageUrl,
           currency: item.currency,
           price: item.price,
+          description: item.description
         })
       }
       style={styles.card}

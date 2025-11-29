@@ -61,7 +61,7 @@ export default function CoffeList() {
 
   return (
     <FlatList
-      style={styles.coffeeList}
+      style={styles.coffeeList }
       data={coffees}
       renderItem={({ item }) => <CoffeeItem item={item} />}
       keyExtractor={(item) => item.id}

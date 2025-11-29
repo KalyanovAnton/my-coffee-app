@@ -1,37 +1,36 @@
-import { useTheme } from "../context/ThemeContext";
-import React from 'react';
-import { Switch, Text, View, StyleSheet } from 'react-native';
+import React, { useContext } from 'react';
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { ThemeContext } from '../contexts/ThemeContext';
+import { THEMES } from '../constants/themes';
 
+export default function ThemeToggle() {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  
 
+  const currentTheme = THEMES[theme];
 
-export default function ThemeToggle(){
-    const {theme, toggleTheme} = useTheme()
-    const isDark = theme === 'dark';
-
-    return (
-    <View style={styles.container}>
-      <Text style={{ color: isDark ? '#FFFFFF' : '#000000' }}>
-        {isDark ? 'Темна тема' : 'Світла тема'}
+  return (
+    <TouchableOpacity 
+      style={[styles.button, { backgroundColor: currentTheme.buttonBackground }]} 
+      onPress={toggleTheme}
+    >
+      <Text style={[styles.text, { color: currentTheme.buttonText }]}>
+        {theme === 'light' ? 'Перейти на Dark' : 'Перейти на Light'}
       </Text>
-      <Switch
-        onValueChange={toggleTheme}
-        value={isDark}
-        trackColor={{ false: '#767577', true: '#81b0ff' }}
-        thumbColor={isDark ? '#f5dd4b' : '#f4f3f4'}
-      />
-    </View>
+    </TouchableOpacity>
   );
-};
-
+}
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 10,
-    marginTop: 20,
-    marginHorizontal: 10,
+  button: {
+    padding: 15,
     borderRadius: 8,
+    margin: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

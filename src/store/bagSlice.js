@@ -24,6 +24,7 @@ const bagSlice = createSlice({
           name: newItem.name,
           imageUrl: newItem.imageUrl,
           currency: newItem.currency,
+          description: newItem.description,
           price: price,
           quantity: 1,
           totalPrice: price,
