@@ -29,13 +29,13 @@ const HomeTabs = createBottomTabNavigator({
     },
     Bag: {
       screen: Bag,
-      options:  {
+      options: {
         title: "Bag",
         tabBarIcon: ({ color, size }) => (
           <Ionicons name="bag-outline" size={size} color={color} />
         ),
-        headerTitleAlign: 'center',
-        headerTitle: 'Your bag'
+        headerTitleAlign: "center",
+        headerTitle: "Your bag",
       },
     },
     History: {
@@ -45,7 +45,7 @@ const HomeTabs = createBottomTabNavigator({
         tabBarIcon: ({ color, size }) => (
           <Ionicons name="time-outline" size={size} color={color} />
         ),
-        headerShown: false
+        headerShown: false,
       },
     },
   },
@@ -70,14 +70,18 @@ const RootStack = createNativeStackNavigator({
     CoffeeDetails: {
       screen: CoffeeDetails,
       options: ({ navigation }) => ({
-        headerTitleAlign: 'center',
-        headerLeft: () => 
-            <TouchableOpacity 
-                onPress={() => navigation.goBack()} 
-                style={{ marginLeft: 15 }} 
-            >
-                <Ionicons name="arrow-back" size={24} color="#000" />
-            </TouchableOpacity>
+        headerTitleAlign: "center",
+        presentation: "modal",
+        gestureEnabled: true,
+        gestureDirection: "vertical",
+        headerLeft: () => (
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={{ marginLeft: 15 }}
+          >
+            <Ionicons name="arrow-back" size={24} color="#000" />
+          </TouchableOpacity>
+        ),
       }),
     },
     NotFound: {

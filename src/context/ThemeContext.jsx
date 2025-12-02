@@ -10,7 +10,6 @@ export const ThemeProvider = ({ children }) => {
 
   const toggleTheme = () => {
     setTheme((currentTheme) => (currentTheme === "light" ? "dark" : "light"));
-    console.log(`Тема змінена на: ${theme === "light" ? "dark" : "light"}`);
   };
 
   const contextValue = {
