@@ -4,12 +4,18 @@ import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import Button from "../../components/Button";
 import { useDispatch } from "react-redux";
 import { addItemToBag } from "../../store/bagSlice";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { THEMES } from "../../constants/themes";
 import { ThemeContext } from "../../context/ThemeContext";
-import {ThemeToggleButton} from '../../components/ThemeToggleButton'
+import { ThemeToggleButton } from "../../components/ThemeToggleButton";
+import Animated , {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
 export function CoffeeDetails() {
+  const AnimatedImage = Animated.createAnimatedComponent(Image);
   const route = useRoute();
   const dispatch = useDispatch();
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -19,19 +25,41 @@ export function CoffeeDetails() {
   const coffeeItem = route.params;
 
   const handleAddToBag = () => {
-    console.log(coffeeItem);
     dispatch(addItemToBag(coffeeItem));
     alert(`${coffeeItem.name} додано до кошика!`);
   };
 
-  
+  const translateY = useSharedValue(300);
+  const opacity = useSharedValue(0);
+
+  useEffect(() => {
+    translateY.value = withTiming(0, { duration: 700 });
+    opacity.value = withTiming(1, { duration: 400 });
+  }, []);
+
+  const infoAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+      transform: [{ translateY: translateY.value }],
+    };
+  });
+
+  const imageAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: withTiming(1, { duration: 700 }),
+      transform: [{ translateY: translateY.value * -0.5 }]
+    };
+  });
 
   return (
     <View
       style={[styles.container, { backgroundColor: currentTheme.background }]}
     >
-      <Image style={styles.image} source={{ uri: route.params.imageUrl }} />
-      <View style={styles.infoContainer}>
+      <AnimatedImage
+        style={[styles.image, imageAnimatedStyle]}
+        source={{ uri: route.params.imageUrl }}
+      />
+      <Animated.View style={[styles.infoContainer, infoAnimatedStyle]}>
         <Text style={[styles.name, { color: currentTheme.text }]}>
           {route.params.name}
         </Text>
@@ -47,15 +75,15 @@ export function CoffeeDetails() {
         >
           {route.params.description}
         </Text>
-      </View>
+      </Animated.View>
       <View style={styles.bottomWrapper}>
         <ThemeToggleButton
           theme={theme}
           toggleTheme={toggleTheme}
           currentTheme={currentTheme}
         />
-        <Button text="Add to bag" onPress={handleAddToBag} />
       </View>
+      <Button text="Add to bag" onPress={handleAddToBag} />
     </View>
   );
 }
@@ -72,7 +100,6 @@ const styles = StyleSheet.create({
 
   bottomWrapper: {
     padding: 24,
-    paddingTop: 10,
   },
 
   description: {
@@ -113,5 +140,3 @@ const styles = StyleSheet.create({
     height: "40%",
   },
 });
-
-

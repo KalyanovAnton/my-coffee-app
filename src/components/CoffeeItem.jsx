@@ -1,22 +1,50 @@
 import { TouchableOpacity, Text, Image, StyleSheet, View } from "react-native";
 import CoffeeDetails from "../navigation/screens/CoffeeDetails";
 import { useNavigation } from "@react-navigation/native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
+import React, { useCallback } from "react";
 
-export default function CoffeeItem({ item }) {
+  function CoffeeItem({ item }) {
   const navigation = useNavigation();
+  const scale = useSharedValue(1);
+  const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+  const handlePressIn = useCallback(() => {
+    scale.value = withSpring(0.95, { damping: 10, stiffness: 150 });
+  }, [scale])
+
+  const handlePressOut = useCallback(() => {
+    scale.value = withSpring(1, { damping: 10, stiffness: 150 });
+  }, [scale]);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
+
+  const handleNavigation = useCallback(() => {
+    navigation.navigate("CoffeeDetails", {
+      id: item.id,
+      name: item.name,
+      imageUrl: item.imageUrl,
+      currency: item.currency,
+      price: item.price,
+      description: item.description,
+      options: item.options || {},
+    });
+  }, [navigation, item]);
+
   return (
-    <TouchableOpacity
-      onPress={() =>
-        navigation.navigate("CoffeeDetails", {
-          id: item.id,
-          name: item.name,
-          imageUrl: item.imageUrl,
-          currency: item.currency,
-          price: item.price,
-          description: item.description
-        })
-      }
-      style={styles.card}
+    <AnimatedTouchableOpacity
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      activeOpacity={1}
+      onPress={handleNavigation}
+      style={[styles.card, animatedStyle]}
     >
       <Image source={{ uri: item.imageUrl }} style={styles.cardImg} />
       <View style={styles.coffeeInfo}>
@@ -25,9 +53,11 @@ export default function CoffeeItem({ item }) {
           {item.currency} {item.price}
         </Text>
       </View>
-    </TouchableOpacity>
+    </AnimatedTouchableOpacity>
   );
 }
+
+export default React.memo(CoffeeItem) 
 
 const styles = StyleSheet.create({
   cardImg: {

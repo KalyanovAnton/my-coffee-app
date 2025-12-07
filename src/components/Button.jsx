@@ -1,12 +1,42 @@
+import { useCallback } from "react";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 
 export default function Button({ text, onPress }) {
+  const scale = useSharedValue(1);
+  const handlePressIn = useCallback(() => {
+    scale.value = withSpring(0.95, { damping: 10, stiffness: 150 });
+  }, [scale]);
+  const handlePressOut = useCallback(() => {
+    scale.value = withSpring(1, { damping: 10, stiffness: 150 });
+
+    if (onPress) {
+      onPress();
+    }
+  }, [scale]);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
+
   return (
-    <View style = {styles.container}>
-      <TouchableOpacity onPress={onPress} style={styles.button}>
+    <Animated.View style={[styles.container, animatedStyle]}>
+      <TouchableOpacity
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        activeOpacity={1}
+        onPress={onPress}
+        style={styles.button}
+      >
         <Text style={styles.textBtn}>{text}</Text>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 }
 
@@ -32,8 +62,8 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent'
-  }
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "transparent",
+  },
 });
