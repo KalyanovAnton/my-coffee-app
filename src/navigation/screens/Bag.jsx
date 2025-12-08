@@ -2,16 +2,23 @@ import { StyleSheet, View, FlatList, Text } from "react-native";
 import { useSelector } from "react-redux";
 import CoffeeBagItem from "../../components/CoffeeBagItem";
 import Button from "../../components/Button";
+import { THEMES } from "../../constants/themes";
+import { ThemeContext } from "../../context/ThemeContext";
+import { useContext } from "react";
 
 export function Bag() {
   const bagItem = useSelector((state) => state.bag.items);
   const totalAmount = useSelector((state) => state.bag.totalAmount);
   const hendleCoffeeBuy = () => {
-    alert('good')
-  }
+    alert("good");
+  };
+
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
+  const currentTheme = THEMES[theme];
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: currentTheme.background }]}>
       <FlatList
         style={styles.coffeeList}
         data={bagItem}
@@ -21,10 +28,10 @@ export function Bag() {
         key={2}
       />
       <View style={styles.totalContainer}>
-        <Text style={styles.totalLabel}>Total</Text>
-        <Text style={styles.totalAmount}>{totalAmount.toFixed(2)}€</Text>
+        <Text style={[styles.totalLabel, { color: currentTheme.text }]}>Total</Text>
+        <Text style={[styles.totalAmount, { color: currentTheme.text }]}>{totalAmount.toFixed(2)}€</Text>
       </View>
-      <Button text='Checkout' onPress={hendleCoffeeBuy} />
+      <Button text="Checkout" onPress={hendleCoffeeBuy} />
     </View>
   );
 }
@@ -45,7 +52,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 24,
     paddingTop: 3,
-    paddingBottom: 0
+    paddingBottom: 0,
   },
 
   totalLabel: {

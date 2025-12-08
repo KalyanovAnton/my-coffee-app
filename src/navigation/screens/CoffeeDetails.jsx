@@ -76,13 +76,6 @@ export function CoffeeDetails() {
           {route.params.description}
         </Text>
       </Animated.View>
-      <View style={styles.bottomWrapper}>
-        <ThemeToggleButton
-          theme={theme}
-          toggleTheme={toggleTheme}
-          currentTheme={currentTheme}
-        />
-      </View>
       <Button text="Add to bag" onPress={handleAddToBag} />
     </View>
   );
@@ -95,10 +88,6 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flex: 1,
-    padding: 24,
-  },
-
-  bottomWrapper: {
     padding: 24,
   },
 

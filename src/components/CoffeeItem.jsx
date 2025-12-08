@@ -6,15 +6,20 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
+import { THEMES } from "../constants/themes";
+import { ThemeContext } from "../context/ThemeContext";
 
-  function CoffeeItem({ item }) {
+function CoffeeItem({ item }) {
   const navigation = useNavigation();
   const scale = useSharedValue(1);
-  const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity);
+  const AnimatedTouchableOpacity =
+    Animated.createAnimatedComponent(TouchableOpacity);
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  const currentTheme = THEMES[theme];
   const handlePressIn = useCallback(() => {
     scale.value = withSpring(0.95, { damping: 10, stiffness: 150 });
-  }, [scale])
+  }, [scale]);
 
   const handlePressOut = useCallback(() => {
     scale.value = withSpring(1, { damping: 10, stiffness: 150 });
@@ -47,9 +52,9 @@ import React, { useCallback } from "react";
       style={[styles.card, animatedStyle]}
     >
       <Image source={{ uri: item.imageUrl }} style={styles.cardImg} />
-      <View style={styles.coffeeInfo}>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.price}>
+      <View style={[styles.coffeeInfo, { backgroundColor: currentTheme.background }]}>
+        <Text style={[styles.name, { color: currentTheme.text }]}>{item.name}</Text>
+        <Text style={[styles.price, { color: currentTheme.text }]}>
           {item.currency} {item.price}
         </Text>
       </View>
@@ -57,7 +62,7 @@ import React, { useCallback } from "react";
   );
 }
 
-export default React.memo(CoffeeItem) 
+export default React.memo(CoffeeItem);
 
 const styles = StyleSheet.create({
   cardImg: {

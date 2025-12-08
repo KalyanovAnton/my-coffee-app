@@ -15,13 +15,6 @@ export function Home() {
     <View
       style={[styles.container, { backgroundColor: currentTheme.background }]}
     >
-      <View style={styles.bottomWrapper}>
-        <ThemeToggleButton
-          theme={theme}
-          toggleTheme={toggleTheme}
-          currentTheme={currentTheme}
-        />
-      </View>
       <CoffeList />
       <ScrollTop />
     </View>
@@ -31,10 +24,5 @@ export function Home() {
 const styles = StyleSheet.create({
   container: {
     height: "100%",
-  },
-  bottomWrapper: {
-    padding: 24,
-    paddingTop: 10,
-    marginTop: 40,
   },
 });

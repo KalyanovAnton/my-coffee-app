@@ -1,9 +1,14 @@
 import { TouchableOpacity, Text, Image, StyleSheet, View } from "react-native";
 import CoffeeDetails from "../navigation/screens/CoffeeDetails";
 import { useNavigation } from "@react-navigation/native";
+import { useContext } from "react";
+import { THEMES } from "../constants/themes";
+import { ThemeContext } from "../context/ThemeContext";
 
 export default function CoffeeBagItem({ item }) {
   const navigation = useNavigation();
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  const currentTheme = THEMES[theme];
   return (
     <TouchableOpacity
       onPress={() =>
@@ -22,10 +27,10 @@ export default function CoffeeBagItem({ item }) {
     >
       <Image source={{ uri: item.imageUrl }} style={styles.cardImg} />
       <View style={styles.detailsWrapper}>
-        <Text style={styles.name}>{item.name}</Text>
+        <Text style={[styles.name, { color: currentTheme.text }]}>{item.name}</Text>
         <View style={styles.coffeeInfo}>
-          <Text style={styles.quantity}>{item.quantity}</Text>
-          <Text style={styles.totalPrice}>{item.totalPrice}€</Text>
+          <Text style={[styles.quantity, { color: currentTheme.text }]}>{item.quantity}</Text>
+          <Text style={[styles.totalPrice, { color: currentTheme.text }]}>{item.totalPrice}€</Text>
         </View>
       </View>
     </TouchableOpacity>

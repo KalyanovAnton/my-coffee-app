@@ -14,6 +14,8 @@ import { CoffeeDetails } from "./screens/CoffeeDetails";
 import { Bag } from "./screens/Bag";
 import { NotFound } from "./screens/NotFound";
 import { Ionicons } from "@expo/vector-icons";
+import SettingsScreen from "./screens/SettingsScreen";
+
 
 const HomeTabs = createBottomTabNavigator({
   screens: {
@@ -44,6 +46,16 @@ const HomeTabs = createBottomTabNavigator({
         title: "history",
         tabBarIcon: ({ color, size }) => (
           <Ionicons name="time-outline" size={size} color={color} />
+        ),
+        headerShown: false,
+      },
+    },
+    Setting: {
+      screen: SettingsScreen,
+      options: {
+        title: "Setting",
+        tabBarIcon: ({ color, size }) => (
+          <Ionicons name="settings-outline" size={size} color={color} />
         ),
         headerShown: false,
       },
