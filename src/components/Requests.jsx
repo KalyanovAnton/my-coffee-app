@@ -5,7 +5,6 @@ export default async function RequestCofee() {
 
   try {
     const response = await axios.get(API_URL);
-    console.log("Отримані дані:", response.data);
     return response.data;
   } catch (error) {
     console.error("Помилка при отриманні даних:", error.message);

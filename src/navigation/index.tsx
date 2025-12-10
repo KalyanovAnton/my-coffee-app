@@ -15,6 +15,7 @@ import { Bag } from "./screens/Bag";
 import { NotFound } from "./screens/NotFound";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsScreen from "./screens/SettingsScreen";
+import DoneOrder from "./screens/DoneOrder";
 
 
 const HomeTabs = createBottomTabNavigator({
@@ -76,7 +77,7 @@ const RootStack = createNativeStackNavigator({
         headerShown: false,
       },
     },
-    Profile: {
+    History: {
       screen: History,
     },
     CoffeeDetails: {
@@ -95,6 +96,13 @@ const RootStack = createNativeStackNavigator({
           </TouchableOpacity>
         ),
       }),
+    },
+
+    DoneOrder: {
+      screen: DoneOrder,
+      options: () => ({
+        headerTitleAlign: "center",
+      }) 
     },
     NotFound: {
       screen: NotFound,

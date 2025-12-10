@@ -34,9 +34,13 @@ const bagSlice = createSlice({
         existingItem.totalPrice += price;
       }
     },
+    clearBag: (state) => { 
+      state.items = [];        
+      state.totalAmount = 0;
+    },
   },
 });
 
-export const { addItemToBag } = bagSlice.actions;
+export const { addItemToBag, clearBag } = bagSlice.actions;
 
 export default bagSlice.reducer;

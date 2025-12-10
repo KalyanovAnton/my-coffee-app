@@ -10,7 +10,7 @@ import CoffeeItem from "../components/CoffeeItem";
 import React, { useEffect, useState } from "react";
 import RequestCofee from "./Requests";
 
-export default function CoffeList() {
+export default function CoffeList({ searchTerm }) {
   const [coffees, setCoffees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,9 +31,7 @@ export default function CoffeList() {
       }
     } catch (e) {
       console.error("Критична помилка завантаження:", e);
-      setError(
-        "Не вдалося завантажити дані. Перевірте з'єднання"
-      );
+      setError("Не вдалося завантажити дані. Перевірте з'єднання");
     } finally {
       setLoading(false);
     }
@@ -52,17 +50,34 @@ export default function CoffeList() {
     return (
       <View style={styles.centerContainer}>
         <Text style={styles.errorText}> Помилка: {error}</Text>
-        <TouchableOpacity style={{ color: "blue", marginTop: 10 }} onPress={fetchData}>
+        <TouchableOpacity
+          style={{ color: "blue", marginTop: 10 }}
+          onPress={fetchData}
+        >
           <Text>Спробувати ще раз</Text>
         </TouchableOpacity>
       </View>
     );
   }
 
+  const filteredCoffees = coffees.filter((coffee) => {
+    return coffee.name.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
+  if (filteredCoffees.length === 0 && searchTerm) {
+    return (
+      <View style={styles.centerContainer}>
+        <Text style={styles.errorText}>
+          Каву з назвою "{searchTerm}" не знайдено.
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <FlatList
-      style={styles.coffeeList }
-      data={coffees}
+      style={styles.coffeeList}
+      data={filteredCoffees}
       renderItem={({ item }) => <CoffeeItem item={item} />}
       keyExtractor={(item) => item.id}
       numColumns={2}

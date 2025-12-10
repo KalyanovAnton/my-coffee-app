@@ -31,7 +31,6 @@ export default function Button({ text, onPress }) {
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         activeOpacity={1}
-        onPress={onPress}
         style={styles.button}
       >
         <Text style={styles.textBtn}>{text}</Text>
