@@ -48,7 +48,8 @@ const HomeTabs = createBottomTabNavigator({
         tabBarIcon: ({ color, size }) => (
           <Ionicons name="time-outline" size={size} color={color} />
         ),
-        headerShown: false,
+        headerTitleAlign: "center",
+        headerTitle: "Your History",
       },
     },
     Setting: {

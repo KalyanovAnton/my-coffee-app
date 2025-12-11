@@ -5,8 +5,9 @@ import Button from "../../components/Button";
 import { THEMES } from "../../constants/themes";
 import { ThemeContext } from "../../context/ThemeContext";
 import { useContext } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { clearBag } from "../../store/bagSlice";
+import { addItemToHistory } from "../../store/historySlice";
 
 export function Bag() {
   const dispatch = useDispatch()
@@ -16,6 +17,10 @@ export function Bag() {
   const hendleCoffeeBuy = () => {
     navigation.navigate('DoneOrder')
     dispatch(clearBag())
+    dispatch(addItemToHistory({
+      items: bagItem,
+      totalAmount: totalAmount
+    }))
   };
 
   const { theme, toggleTheme } = useContext(ThemeContext);
