@@ -4,11 +4,11 @@ import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import Button from "../../components/Button";
 import { useDispatch } from "react-redux";
 import { addItemToBag } from "../../store/bagSlice";
-import { useContext, useEffect } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { THEMES } from "../../constants/themes";
 import { ThemeContext } from "../../context/ThemeContext";
 import { ThemeToggleButton } from "../../components/ThemeToggleButton";
-import Animated , {
+import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -24,10 +24,10 @@ export function CoffeeDetails() {
 
   const coffeeItem = route.params;
 
-  const handleAddToBag = () => {
+  const handleAddToBag = useCallback(() => {
     dispatch(addItemToBag(coffeeItem));
     alert(`${coffeeItem.name} додано до кошика!`);
-  };
+  });
 
   const translateY = useSharedValue(300);
   const opacity = useSharedValue(0);
@@ -47,7 +47,7 @@ export function CoffeeDetails() {
   const imageAnimatedStyle = useAnimatedStyle(() => {
     return {
       opacity: withTiming(1, { duration: 700 }),
-      transform: [{ translateY: translateY.value * -0.5 }]
+      transform: [{ translateY: translateY.value * -0.5 }],
     };
   });
 

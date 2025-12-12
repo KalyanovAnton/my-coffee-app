@@ -39,9 +39,13 @@ const bagSlice = createSlice({
       state.items = [];        
       state.totalAmount = 0;
     },
+    deleteItem: (state, action) => {
+      const itemIndexToDelete = action.payload;
+      state.items.splice(itemIndexToDelete, 1);
+    }
   },
 });
 
-export const { addItemToBag, clearBag } = bagSlice.actions;
+export const { deleteItem, addItemToBag, clearBag } = bagSlice.actions;
 
 export default bagSlice.reducer;

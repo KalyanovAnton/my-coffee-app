@@ -7,16 +7,21 @@ import {
   TouchableOpacity,
 } from "react-native";
 import CoffeeItem from "../components/CoffeeItem";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import RequestCofee from "./Requests";
 import ScrollTop from "./ScrollTop";
 import Button from "./Button";
+import { THEMES } from "../constants/themes";
+import { ThemeContext } from "../context/ThemeContext";
 
 export default function CoffeList({ searchTerm }) {
   const [coffees, setCoffees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const flatListRef = useRef();
+    const { theme, toggleTheme } = useContext(ThemeContext);
+    const currentTheme = THEMES[theme];
+    
 
   useEffect(() => {
     fetchData();
@@ -44,7 +49,7 @@ export default function CoffeList({ searchTerm }) {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#523308" />
-        <Text style={{ marginTop: 10 }}>Завантаження меню з MockAPI...</Text>
+        <Text style={[{ marginTop: 10 }, { color: currentTheme.text }]}>Завантаження меню з MockAPI...</Text>
       </View>
     );
   }
@@ -52,8 +57,8 @@ export default function CoffeList({ searchTerm }) {
   if (error) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorText}> Помилка: {error}</Text>
-        <Button onPress={fetchData} text='Спробувати ще раз'/>
+        <Text style={[styles.errorText, { color: currentTheme.text }]}> Помилка: {error}</Text>
+        <Button onPress={fetchData} text="Спробувати ще раз" />
       </View>
     );
   }
@@ -65,7 +70,7 @@ export default function CoffeList({ searchTerm }) {
   if (filteredCoffees.length === 0 && searchTerm) {
     return (
       <View style={styles.centerContainer}>
-        <Text style={styles.errorText}>
+        <Text style={[styles.errorText, { color: currentTheme.text }]}>
           Каву з назвою "{searchTerm}" не знайдено.
         </Text>
       </View>
@@ -109,13 +114,13 @@ const styles = StyleSheet.create({
 
   centerContainer: {
     flex: 1,
-    justifyContent: 'center',
-    marginRight: 'auto',
-    marginLeft: 'auto'
+    justifyContent: "center",
+    marginRight: "auto",
+    marginLeft: "auto",
   },
   errorText: {
     fontWeight: 700,
     fontSize: 16,
-    marginBottom: 16
-  }
+    marginBottom: 16,
+  },
 });

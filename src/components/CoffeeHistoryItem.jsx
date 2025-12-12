@@ -1,22 +1,21 @@
 import { useNavigation } from "@react-navigation/native";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useContext } from "react";
+import React, { useCallback, useContext } from "react";
 import { THEMES } from "../constants/themes";
 import { ThemeContext } from "../context/ThemeContext";
 import { addItemToHistory } from "../store/historySlice";
 
-export default function CoffeeHistoryItem({ order }) {
+function CoffeeHistoryItem({ order }) {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const currentTheme = THEMES[theme];
   const navigation = useNavigation();
   const itemPreview = order.items
     .map((item) => `${item.name} (x${item.quantity})`)
-    .slice(0, 2)
     .join(", ");
 
-  const handleGoBag = () => {
+  const handleGoBag = useCallback(() => {
     navigation.navigate("DoneOrder");
-  };
+  });
   return (
     <View
       style={[
@@ -37,7 +36,7 @@ export default function CoffeeHistoryItem({ order }) {
       </Text>
 
       <Text style={[styles.previewText, { color: currentTheme.text }]}>
-        {itemPreview} {order.items.length > 2 ? "та ін." : ""}
+        {itemPreview}
       </Text>
 
       <View style={styles.footer}>
@@ -51,6 +50,8 @@ export default function CoffeeHistoryItem({ order }) {
     </View>
   );
 }
+
+export default React.memo(CoffeeHistoryItem);
 
 const styles = StyleSheet.create({
   card: {

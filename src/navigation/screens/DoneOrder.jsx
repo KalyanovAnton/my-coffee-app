@@ -4,16 +4,16 @@ import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { THEMES } from "../../constants/themes";
 import { ThemeContext } from "../../context/ThemeContext";
-import { useContext  } from "react";
+import { useCallback, useContext  } from "react";
 
 export default function DoneOrder() {
   const navigation = useNavigation();
   const { theme, toggleTheme } = useContext(ThemeContext);
   const currentTheme = THEMES[theme];
 
-  const handleGoHome = () => {
+  const handleGoHome = useCallback(() => {
     navigation.navigate("HomeTabs", { screen: "Home" });
-  };
+  });
   return (
     <View style={[styles.container, { backgroundColor: currentTheme.background }]}>
       <View style={styles.doneInfo}>
