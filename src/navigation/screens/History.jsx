@@ -1,17 +1,19 @@
 import { Text } from "@react-navigation/elements";
 import { StaticScreenProps } from "@react-navigation/native";
 import { FlatList, StyleSheet, View } from "react-native";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { THEMES } from "../../constants/themes";
 import { ThemeContext } from "../../context/ThemeContext";
 import { useSelector } from "react-redux";
 import CoffeeHistoryItem from "../../components/CoffeeHistoryItem";
+import ScrollTop from "../../components/ScrollTop";
 
 export function History({ route }) {
   const { theme, toggleTheme } = useContext(ThemeContext);
   const currentTheme = THEMES[theme];
   const historyItem = useSelector((state) => state.history.orders);
   const totalQuantity = useSelector((state) => state.history.totalQuantity);
+  const flatListRef = useRef();
 
   if (!historyItem || historyItem.length === 0) {
     return (
@@ -27,6 +29,11 @@ export function History({ route }) {
       </View>
     );
   }
+  const handleScrollToTop = () => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToOffset({ animated: true, offset: 0 });
+    }
+  };
   return (
     <View
       style={[styles.container, { backgroundColor: currentTheme.background }]}
@@ -39,15 +46,19 @@ export function History({ route }) {
           {totalQuantity}
         </Text>
       </View>
-      <FlatList
-        style={styles.coffeeList}
-        data={historyItem}
-        renderItem={({ item }) => <CoffeeHistoryItem order={item} />}
-        numColumns={1}
-        key={2}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.listContentContainer}
-      />
+      <View style={styles.listContainer}>
+        <FlatList
+          ref={flatListRef}
+          style={styles.coffeeList}
+          data={historyItem}
+          renderItem={({ item }) => <CoffeeHistoryItem order={item} />}
+          numColumns={1}
+          key={2}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.listContentContainer}
+        />
+        <ScrollTop onPressScroll={handleScrollToTop} />
+      </View>
     </View>
   );
 }
@@ -71,8 +82,8 @@ const styles = StyleSheet.create({
     padding: 24,
     paddingTop: 15,
     paddingBottom: 3,
-    marginLeft: 'auto',
-    marginRight: 'auto'
+    marginLeft: "auto",
+    marginRight: "auto",
   },
 
   totalLabel: {
@@ -82,7 +93,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     color: "#71727A",
-    marginRight: 10
+    marginRight: 10,
   },
 
   totalAmount: {
@@ -93,4 +104,17 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     color: "#1F2024",
   },
+  listContainer:{
+    flex: 1
+  },
+  centerContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center'
+  },
+
+  emptyText: {
+     fontWeight: 600,
+     fontSize: 18
+  }
 });

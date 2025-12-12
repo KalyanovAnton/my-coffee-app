@@ -1,7 +1,6 @@
 import { Text } from "@react-navigation/elements";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import CoffeList from "../../components/CoffeeList";
-import ScrollTop from "../../components/ScrollTop";
 import { ThemeToggleButton } from "../../components/ThemeToggleButton";
 import { THEMES } from "../../constants/themes";
 import { ThemeContext } from "../../context/ThemeContext";
@@ -19,7 +18,7 @@ export function Home() {
     >
       <SearchCoffee searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
       <CoffeList searchTerm={searchTerm}/>
-      <ScrollTop />
+      
     </View>
   );
 }

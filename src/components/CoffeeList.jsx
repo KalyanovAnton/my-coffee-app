@@ -7,13 +7,16 @@ import {
   TouchableOpacity,
 } from "react-native";
 import CoffeeItem from "../components/CoffeeItem";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import RequestCofee from "./Requests";
+import ScrollTop from "./ScrollTop";
+import Button from "./Button";
 
 export default function CoffeList({ searchTerm }) {
   const [coffees, setCoffees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const flatListRef = useRef();
 
   useEffect(() => {
     fetchData();
@@ -50,12 +53,7 @@ export default function CoffeList({ searchTerm }) {
     return (
       <View style={styles.centerContainer}>
         <Text style={styles.errorText}> Помилка: {error}</Text>
-        <TouchableOpacity
-          style={{ color: "blue", marginTop: 10 }}
-          onPress={fetchData}
-        >
-          <Text>Спробувати ще раз</Text>
-        </TouchableOpacity>
+        <Button onPress={fetchData} text='Спробувати ще раз'/>
       </View>
     );
   }
@@ -74,21 +72,50 @@ export default function CoffeList({ searchTerm }) {
     );
   }
 
+  const handleScrollToTop = () => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToOffset({ animated: true, offset: 0 });
+    }
+  };
+
   return (
-    <FlatList
-      style={styles.coffeeList}
-      data={filteredCoffees}
-      renderItem={({ item }) => <CoffeeItem item={item} />}
-      keyExtractor={(item) => item.id}
-      numColumns={2}
-      key={2}
-    />
+    <View style={styles.container}>
+      <FlatList
+        ref={flatListRef}
+        style={styles.coffeeList}
+        data={filteredCoffees}
+        renderItem={({ item }) => <CoffeeItem item={item} />}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        key={2}
+        contentContainerStyle={styles.listContentContainer}
+      />
+      <ScrollTop onPressScroll={handleScrollToTop} />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   coffeeList: {
     flex: 1,
     padding: 15,
   },
+  listContentContainer: {
+    paddingBottom: 24,
+  },
+
+  centerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    marginRight: 'auto',
+    marginLeft: 'auto'
+  },
+  errorText: {
+    fontWeight: 700,
+    fontSize: 16,
+    marginBottom: 16
+  }
 });

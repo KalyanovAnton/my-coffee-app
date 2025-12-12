@@ -4,23 +4,27 @@ import CoffeeBagItem from "../../components/CoffeeBagItem";
 import Button from "../../components/Button";
 import { THEMES } from "../../constants/themes";
 import { ThemeContext } from "../../context/ThemeContext";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { clearBag } from "../../store/bagSlice";
 import { addItemToHistory } from "../../store/historySlice";
+import ScrollTop from "../../components/ScrollTop";
 
 export function Bag() {
-  const dispatch = useDispatch()
-  const navigation = useNavigation()
+  const dispatch = useDispatch();
+  const flatListRef = useRef();
+  const navigation = useNavigation();
   const bagItem = useSelector((state) => state.bag.items);
   const totalAmount = useSelector((state) => state.bag.totalAmount);
   const hendleCoffeeBuy = () => {
-    navigation.navigate('DoneOrder')
-    dispatch(clearBag())
-    dispatch(addItemToHistory({
-      items: bagItem,
-      totalAmount: totalAmount
-    }))
+    navigation.navigate("DoneOrder");
+    dispatch(
+      addItemToHistory({
+        items: bagItem,
+        totalAmount: totalAmount,
+      })
+    );
+    dispatch(clearBag());
   };
 
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -32,23 +36,35 @@ export function Bag() {
       <View
         style={[styles.bagNoItem, { backgroundColor: currentTheme.background }]}
       >
-        <Text style={[styles.bagEmpty, {color: currentTheme.text}]}>Кошик пустий</Text>
+        <Text style={[styles.bagEmpty, { color: currentTheme.text }]}>
+          Кошик пустий
+        </Text>
       </View>
     );
   }
+
+  const handleScrollToTop = () => {
+    if (flatListRef.current) {
+      flatListRef.current.scrollToOffset({ animated: true, offset: 0 });
+    }
+  };
 
   return (
     <View
       style={[styles.container, { backgroundColor: currentTheme.background }]}
     >
-      <FlatList
-        style={styles.coffeeList}
-        data={bagItem}
-        renderItem={({ item }) => <CoffeeBagItem item={item} />}
-        keyExtractor={(item) => item.id}
-        numColumns={1}
-        key={2}
-      />
+      <View style={styles.listContainer}>
+        <FlatList
+          ref={flatListRef}
+          style={styles.coffeeList}
+          data={bagItem}
+          renderItem={({ item }) => <CoffeeBagItem item={item} />}
+          keyExtractor={(item) => item.id}
+          numColumns={1}
+          key={2}
+        />
+        <ScrollTop onPressScroll={handleScrollToTop} />
+      </View>
       <View style={styles.totalContainer}>
         <Text style={[styles.totalLabel, { color: currentTheme.text }]}>
           Total
@@ -108,5 +124,9 @@ const styles = StyleSheet.create({
   bagEmpty: {
     fontSize: 18,
     fontWeight: 400,
+  },
+
+  listContainer: {
+    flex: 1,
   },
 });

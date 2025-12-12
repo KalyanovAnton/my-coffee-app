@@ -2,21 +2,26 @@ import { Text, View, StyleSheet } from "react-native";
 import Button from "../../components/Button";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { THEMES } from "../../constants/themes";
+import { ThemeContext } from "../../context/ThemeContext";
+import { useContext  } from "react";
 
 export default function DoneOrder() {
   const navigation = useNavigation();
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  const currentTheme = THEMES[theme];
 
   const handleGoHome = () => {
     navigation.navigate("HomeTabs", { screen: "Home" });
   };
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: currentTheme.background }]}>
       <View style={styles.doneInfo}>
         <View style={styles.doneIconBac}>
           <Ionicons name="checkmark-sharp" style={styles.doneIcon} size={100} />
         </View>
-        <Text style={styles.doneText}>Зачекайте приблизно 5хв</Text>
-        <Text>Тут незабаром з'явиться місцезнаходження кав'ярні</Text>
+        <Text style={[styles.doneText, { color: currentTheme.text }]}>Зачекайте приблизно 5хв</Text>
+        <Text style={ { color: currentTheme.text }}>Тут незабаром з'явиться місцезнаходження кав'ярні</Text>
       </View>
       <Button text="Home" onPress={handleGoHome} />
     </View>

@@ -1,9 +1,9 @@
 import { StyleSheet, TouchableOpacity} from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 
-export default function ScrollTop() {
+export default function ScrollTop({onPressScroll}) {
   return (
-      <TouchableOpacity style={styles.scrollTop}>
+      <TouchableOpacity onPress = {onPressScroll} style={styles.scrollTop}>
         <Ionicons 
         name="chevron-up"
         size={32}      

@@ -13,6 +13,8 @@ const historySlice = createSlice({
       const { items, totalAmount } = action.payload;
       if (!items || items.length === 0) return state;
 
+      const itemsCopy = JSON.parse(JSON.stringify(items));
+
       const newOrder = {
         id: Date.now(),
         date: new Date().toLocaleString("uk-UA", {
@@ -22,12 +24,12 @@ const historySlice = createSlice({
           hour: "2-digit",
           minute: "2-digit",
         }),
-        items: items,
+        items: itemsCopy,
         totalAmount: totalAmount,
       };
 
       state.orders.unshift(newOrder);
-      state.totalQuantity += items.length;
+      state.totalQuantity += 1;
     },
   },
 });

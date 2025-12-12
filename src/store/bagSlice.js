@@ -34,6 +34,7 @@ const bagSlice = createSlice({
         existingItem.totalPrice += price;
       }
     },
+    
     clearBag: (state) => { 
       state.items = [];        
       state.totalAmount = 0;

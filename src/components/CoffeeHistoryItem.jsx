@@ -3,10 +3,9 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useContext } from "react";
 import { THEMES } from "../constants/themes";
 import { ThemeContext } from "../context/ThemeContext";
-import { useDispatch } from "react-redux";
+import { addItemToHistory } from "../store/historySlice";
 
 export default function CoffeeHistoryItem({ order }) {
-  const dispatch = useDispatch()
   const { theme, toggleTheme } = useContext(ThemeContext);
   const currentTheme = THEMES[theme];
   const navigation = useNavigation();
@@ -15,11 +14,11 @@ export default function CoffeeHistoryItem({ order }) {
     .slice(0, 2)
     .join(", ");
 
-    const handleGoBag = () => {
-      navigation.navigate('HomeTabs', { screen: "Bag" })
-    }
+  const handleGoBag = () => {
+    navigation.navigate("DoneOrder");
+  };
   return (
-    <TouchableOpacity
+    <View
       style={[
         styles.card,
         {
@@ -27,7 +26,6 @@ export default function CoffeeHistoryItem({ order }) {
             currentTheme.cardBackground || currentTheme.background,
         },
       ]}
-      onPress={handleGoBag}
     >
       <Text
         style={[
@@ -43,11 +41,14 @@ export default function CoffeeHistoryItem({ order }) {
       </Text>
 
       <View style={styles.footer}>
+        <TouchableOpacity onPress={handleGoBag} style={styles.btnHistoriOrder}>
+          <Text style={styles.textBtn}>Замовити знову</Text>
+        </TouchableOpacity>
         <Text style={[styles.totalAmount, { color: currentTheme.text }]}>
           Загальна сума: {order.totalAmount.toFixed(2)}€
         </Text>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 }
 
@@ -59,8 +60,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ddd",
     marginBottom: 15,
-    marginLeft: 'auto',
-    marginRight: 'auto'
+    marginLeft: "auto",
+    marginRight: "auto",
   },
   orderDate: {
     fontSize: 12,
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: "row",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     paddingTop: 5,
     borderTopWidth: 1,
     borderTopColor: "#eee",
@@ -82,5 +83,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#523308",
+  },
+  btnHistoriOrder: {
+    width: "45%",
+    backgroundColor: "#523308",
+    borderRadius: 12,
+    padding: 12,
+  },
+
+  textBtn: {
+    color: "#FFFFFF",
+    fontFamily: "Inter",
+    fontStyle: "normal",
+    fontWeight: 600,
+    fontSize: 12,
+    lineHeight: 15,
   },
 });
