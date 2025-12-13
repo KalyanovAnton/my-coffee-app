@@ -4,7 +4,7 @@ import CoffeeBagItem from "../../components/CoffeeBagItem";
 import Button from "../../components/Button";
 import { THEMES } from "../../constants/themes";
 import { ThemeContext } from "../../context/ThemeContext";
-import { useContext, useRef } from "react";
+import { useContext, useRef, useCallback } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { clearBag } from "../../store/bagSlice";
 import { addItemToHistory } from "../../store/historySlice";
@@ -16,8 +16,7 @@ export function Bag() {
   const navigation = useNavigation();
   const bagItem = useSelector((state) => state.bag.items);
   const totalAmount = useSelector((state) => state.bag.totalAmount);
-  const hendleCoffeeBuy = () => {
-    navigation.navigate("DoneOrder");
+  const hendleCoffeeBuy = useCallback(()=> {
     dispatch(
       addItemToHistory({
         items: bagItem,
@@ -25,7 +24,8 @@ export function Bag() {
       })
     );
     dispatch(clearBag());
-  };
+    navigation.navigate("DoneOrder");
+  }, [navigation, dispatch, bagItem, totalAmount]) 
 
   const { theme, toggleTheme } = useContext(ThemeContext);
 

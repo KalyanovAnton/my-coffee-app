@@ -9,10 +9,15 @@ import Animated, {
 import React, { useCallback, useContext } from "react";
 import { THEMES } from "../constants/themes";
 import { ThemeContext } from "../context/ThemeContext";
+import { Ionicons } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { addItemToBag } from "../store/bagSlice";
 
 function CoffeeItem({ item }) {
   const navigation = useNavigation();
   const scale = useSharedValue(1);
+  const dispatch = useDispatch()
+  
   const AnimatedTouchableOpacity =
     Animated.createAnimatedComponent(TouchableOpacity);
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -43,6 +48,13 @@ function CoffeeItem({ item }) {
     });
   }, [navigation, item]);
 
+  
+
+  const handleAddToBag = useCallback(() => {
+      dispatch(addItemToBag(item));
+      alert(`${item.name} додано до кошика!`);
+    });
+
   return (
     <AnimatedTouchableOpacity
       onPressIn={handlePressIn}
@@ -52,11 +64,24 @@ function CoffeeItem({ item }) {
       style={[styles.card, animatedStyle]}
     >
       <Image source={{ uri: item.imageUrl }} style={styles.cardImg} />
-      <View style={[styles.coffeeInfo, { backgroundColor: currentTheme.background }]}>
-        <Text style={[styles.name, { color: currentTheme.text }]}>{item.name}</Text>
-        <Text style={[styles.price, { color: currentTheme.text }]}>
-          {item.currency} {item.price}
-        </Text>
+      <View
+        style={[
+          styles.coffeeInfo,
+          { backgroundColor: currentTheme.background },
+        ]}
+      >
+        <View>
+          <Text style={[styles.name, { color: currentTheme.text }]}>
+            {item.name}
+          </Text>
+          <Text style={[styles.price, { color: currentTheme.text }]}>
+            {item.currency} {item.price}
+          </Text>
+        </View>
+
+        <TouchableOpacity onPress={handleAddToBag}>
+          <Ionicons style={{ color: currentTheme.text }} name="bag-outline" size={18} color="#423e3dff" />
+        </TouchableOpacity>
       </View>
     </AnimatedTouchableOpacity>
   );
@@ -85,6 +110,8 @@ const styles = StyleSheet.create({
   },
   coffeeInfo: {
     padding: 16,
+    flexDirection: "row",
+    justifyContent: 'space-between'
   },
 
   name: {

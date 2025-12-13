@@ -15,8 +15,8 @@ function CoffeeBagItem({ item }) {
   const dispatch = useDispatch();
 
   const handleDaleteItem = useCallback(() => {
-    dispatch(deleteItem());
-  });
+    dispatch(deleteItem(item.id));
+  }, [dispatch, item.id]);
   return (
     <TouchableOpacity
       onPress={() =>
@@ -40,7 +40,7 @@ function CoffeeBagItem({ item }) {
             {item.name}
           </Text>
           <TouchableOpacity onPress={handleDaleteItem}>
-            <Ionicons name="trash-outline" style={styles.trashIcon} size={18} color="#423e3dff" />
+            <Ionicons name="trash-outline" size={18} color="#423e3dff" />
           </TouchableOpacity>
         </View>
         <View style={styles.coffeeInfo}>

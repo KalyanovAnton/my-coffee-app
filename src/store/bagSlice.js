@@ -34,15 +34,24 @@ const bagSlice = createSlice({
         existingItem.totalPrice += price;
       }
     },
-    
-    clearBag: (state) => { 
-      state.items = [];        
+
+    clearBag: (state) => {
+      state.items = [];
       state.totalAmount = 0;
+      state.totalQuantity = 0;
     },
     deleteItem: (state, action) => {
-      const itemIndexToDelete = action.payload;
-      state.items.splice(itemIndexToDelete, 1);
-    }
+      const id = action.payload;
+
+      const itemToDelete = state.items.find((item) => item.id === id);
+
+      if (itemToDelete) {
+        state.totalQuantity -= itemToDelete.quantity;
+        state.totalAmount -= itemToDelete.totalPrice;
+
+        state.items = state.items.filter((item) => item.id !== id);
+      }
+    },
   },
 });
 

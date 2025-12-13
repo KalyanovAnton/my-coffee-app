@@ -13,7 +13,6 @@ const historySlice = createSlice({
       const { items, totalAmount } = action.payload;
       if (!items || items.length === 0) return state;
 
-      const itemsCopy = JSON.parse(JSON.stringify(items));
 
       const newOrder = {
         id: Date.now(),
@@ -24,7 +23,7 @@ const historySlice = createSlice({
           hour: "2-digit",
           minute: "2-digit",
         }),
-        items: itemsCopy,
+        items: items,
         totalAmount: totalAmount,
       };
 
